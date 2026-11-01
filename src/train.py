@@ -36,7 +36,7 @@ def main():
     )
 
     model = RandomForestClassifier(
-        n_estimators=100,
+        n_estimators=120,
         max_depth=MAX_DEPTH,
         random_state=MODEL_RANDOM_STATE,
         n_jobs=1,
