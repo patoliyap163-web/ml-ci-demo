@@ -2,7 +2,7 @@
 """Train the mushroom classifier and save model metrics."""
 
 import json
-import sys
+import os
 
 import joblib
 from sklearn.ensemble import RandomForestClassifier
@@ -13,9 +13,15 @@ from sklearn.model_selection import (
     train_test_split,
 )
 
-from src.data import RANDOM_STATE, load_mushroom
+from src.data import load_mushroom
 
-MAX_DEPTH = int(sys.argv[1]) if len(sys.argv) > 1 else None
+MODEL_RANDOM_STATE = int(os.getenv("MODEL_RANDOM_STATE", "42"))
+
+max_depth_value = os.getenv("MODEL_MAX_DEPTH", "None")
+MAX_DEPTH = (
+    None if max_depth_value.lower() == "none"
+    else int(max_depth_value)
+)
 
 
 def main():
@@ -25,14 +31,14 @@ def main():
         X,
         y,
         test_size=0.25,
-        random_state=RANDOM_STATE,
+        random_state=MODEL_RANDOM_STATE,
         stratify=y,
     )
 
     model = RandomForestClassifier(
         n_estimators=100,
         max_depth=MAX_DEPTH,
-        random_state=RANDOM_STATE,
+        random_state=MODEL_RANDOM_STATE,
         n_jobs=1,
     )
 
@@ -42,7 +48,7 @@ def main():
     folds = StratifiedKFold(
         n_splits=5,
         shuffle=True,
-        random_state=RANDOM_STATE,
+        random_state=MODEL_RANDOM_STATE,
     )
 
     cv_scores = cross_val_score(
