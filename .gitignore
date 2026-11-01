@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.DS_Store
+
+# Build outputs (CI uploads these as artifacts)
+model.joblib
+metrics.json
